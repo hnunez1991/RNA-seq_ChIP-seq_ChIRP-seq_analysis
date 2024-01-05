@@ -1,1 +1,38 @@
+##########################     Supplementary code used for RNA-seq analysis (R version 4.0.5)    ##########################
+library(gplots)
+library("RColorBrewer")
 
+#EdgeR output table corresponding to all annotated genes used in differential gene expression. 
+#This table was filtered to identify significantly (FDR < 0.05) upregulated and downregulated genes 
+#by log2 fold change > 1 and log2 fold change < - 1, respectively.
+
+degs<- read.delim("edgeR_delEX1vsWT.tabular",header = T)
+degs<- subset(degs, degs$FDR<0.05)
+up<- subset(degs, degs$logFC>1)
+up$state<-paste0("upregulated",up$state)
+down<- subset(degs,degs$logFC<(-1))
+down$state<-paste0("downregulated",degs$state)
+all<-rbind(up,down)
+
+#EdgeR output table of normalized counts (log2 CPM) per each replicate (3 replicates for each sample)
+#were transformed into z-score and used to generate a heatmap plot of differentially expressed genes. 
+
+counts<- read.delim("WT_delEX1_delEX2_normcounts.tsv", header = T)
+counts<- counts[,2:10]
+z.mat <- t(scale(t(counts), scale=TRUE, center=TRUE))
+heatmap.2(z.mat,
+          dendrogram="none", 
+          scale="none", 
+          trace = "none",
+          col=brewer.pal(10,"RdYlBu"),
+          key= TRUE,
+          symkey = F,
+          density.info = "none",
+          key.title = NA,
+          key.xlab = NA,
+          cexCol = 1,
+          cexRow =1,
+          labRow = NA,
+          #cexRow = 2,
+          keysize = 0
+)
