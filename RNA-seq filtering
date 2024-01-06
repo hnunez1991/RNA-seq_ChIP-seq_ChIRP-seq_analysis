@@ -6,13 +6,21 @@ library("RColorBrewer")
 #This table was filtered to identify significantly (FDR < 0.05) upregulated and downregulated genes 
 #by log2 fold change > 1 and log2 fold change < - 1, respectively.
 
-degs<- read.delim("edgeR_delEX1vsWT.tabular",header = T)
-degs<- subset(degs, degs$FDR<0.05)
-up<- subset(degs, degs$logFC>1)
-up$state<-paste0("upregulated",up$state)
-down<- subset(degs,degs$logFC<(-1))
-down$state<-paste0("downregulated",degs$state)
-all<-rbind(up,down)
+degs_delEX1<- read.delim("edgeR_delEX1vsWT.tabular",header = T)
+degs_delEX1<- subset(degs_delEX1, degs_delEX1$FDR<0.05)
+up_delEX1<- subset(degs_delEX1, degs_delEX1$logFC>1)
+up_delEX1$state<-paste0("upregulated",up_delEX1$state)
+down_delEX1<- subset(degs_delEX1,degs_delEX1$logFC<(-1))
+down_delEX1$state<-paste0("downregulated",degs_delEX1$state)
+all_delEX1<-rbind(up_delEX1,down_delEX1)
+
+degs_delEX2<- read.delim("edgeR_delEX2vsWT.tabular",header = T)
+degs_delEX2<- subset(degs_delEX2, degs_delEX2$FDR<0.05)
+up_delEX2<- subset(degs_delEX2, degs_delEX2$logFC>1)
+up_delEX2$state<-paste0("upregulated",up_delEX2$state)
+down_delEX2<- subset(degs_delEX2,degs_delEX2$logFC<(-1))
+down_delEX2$state<-paste0("downregulated",degs_delEX2$state)
+all_delEX2<-rbind(up_delEX2,down_delEX2)
 
 #EdgeR output table of normalized counts (log2 CPM) per each replicate (3 replicates for each sample)
 #were transformed into z-score and used to generate a heatmap plot of differentially expressed genes. 
