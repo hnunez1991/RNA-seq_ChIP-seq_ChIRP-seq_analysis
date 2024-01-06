@@ -36,3 +36,5 @@ heatmap.2(z.mat,
           #cexRow = 2,
           keysize = 0
 )
+
+##########################     Supplementary code used for ChIP-seq analysis (R version 4.0.5)    ##########################
