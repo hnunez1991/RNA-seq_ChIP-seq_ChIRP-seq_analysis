@@ -5,6 +5,7 @@ library("RColorBrewer")
 #EdgeR output table corresponding to all annotated genes used in differential gene expression. 
 #This table was filtered to identify significantly (FDR < 0.05) upregulated and downregulated genes 
 #by log2 fold change > 1 and log2 fold change < - 1, respectively.
+#Common upregulated and downregulated genes between delEX1 and delEX2 were identified by intersecting both gene lists.
 
 degs_delEX1<- read.delim("edgeR_delEX1vsWT.tabular",header = T)
 degs_delEX1<- subset(degs_delEX1, degs_delEX1$FDR<0.05)
@@ -22,8 +23,11 @@ down_delEX2<- subset(degs_delEX2,degs_delEX2$logFC<(-1))
 down_delEX2$state<-paste0("downregulated",degs_delEX2$state)
 all_delEX2<-rbind(up_delEX2,down_delEX2)
 
+up_delEX1_delEX2<- subset(up_delEX1, up_delEX1$GeneID %in% up_delEX2$GeneID)
+down_delEX1_delEX2 <- subset(down_delEX1, down_delEX1$GeneID %in% down_delEX2$GeneID)
+
 #EdgeR output table of normalized counts (log2 CPM) per each replicate (3 replicates for each sample)
-#were transformed into z-score and used to generate a heatmap plot of differentially expressed genes. 
+#was transformed into z-score and used to generate a heatmap plot of differentially expressed genes. 
 
 counts<- read.delim("WT_delEX1_delEX2_normcounts.tsv", header = T)
 counts<- counts[,2:10]
@@ -32,7 +36,7 @@ heatmap.2(z.mat,
           dendrogram="none", 
           scale="none", 
           trace = "none",
-          col=brewer.pal(10,"RdYlBu"),
+          col=brewer.pal(9,"RdYlBu"),
           key= TRUE,
           symkey = F,
           density.info = "none",
@@ -46,3 +50,5 @@ heatmap.2(z.mat,
 )
 
 ##########################     Supplementary code used for ChIP-seq analysis (R version 4.0.5)    ##########################
+
+
